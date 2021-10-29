@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:01:48 by wperu             #+#    #+#             */
-/*   Updated: 2021/10/18 17:50:07 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/10/29 17:53:43 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ namespace ft
         typedef typename ft::const_reverse_iterator<const iterator>     const_reverse_iterator;
         typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
         typedef typename allocator_type::size_type                      size_type;
-
+    
+        
         explicit vector(const allocator_type& alloc = allocator_type()));
         explicit vector(size_type n, const type_value& val = value_type(), const allocator_type &alloc = allocateur_type());
         
