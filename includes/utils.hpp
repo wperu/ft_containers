@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 17:53:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/10/29 18:21:39 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/10/30 15:08:15 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,30 @@ namespace ft
         return ( pair<T1,T2>(x,y) );
     }
 
+
+    template <class InputIterator1, class InputIterator2>
+    bool equal ( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2 )
+    {
+    while (first1!=last1) 
+    {
+        if (!(*first1 == *first2))
+           return false;
+        ++first1; ++first2;
+    }
+        return true;
+    }
+    
+    template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+    bool equal (InputIterator1 first1, InputIterator1 last1,
+                InputIterator2 first2, BinaryPredicate pred)
+    {
+        while (first1!=last1)
+        {
+            if (!pred(*first1,*first2))  
+                return false;
+            ++first1; ++first2;
+        }
+        return true;
+    }
     
 }
