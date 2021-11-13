@@ -6,13 +6,14 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 17:53:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/10/30 15:08:15 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/11/13 17:15:40 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exception>
 #include <cstddef>
-#incldue <iostream>
+#include <iostream>
+
 
 namespace ft
 {
