@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 17:43:25 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/17 16:12:03 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/11/17 18:06:24 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "stack.hpp"
 namespace ft
 {
-template <class T, class Alloc>
+    template <class T, class Alloc>
 	bool operator== (const stack<T,Alloc>& lhs, const stack<T,Alloc>& rhs)
 	{
 		return (ft::equal<
