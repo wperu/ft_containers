@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 16:22:16 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/17 18:01:44 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/11/22 18:07:43 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ namespace ft
 			typedef typename ft::iterator_traits<Iterator>::reference       reference;
 			typedef typename ft::iterator_traits<Iterator>::pointer         pointer;
     
-		reverse_iterator(): current() {}
+		reverse_iterator(): current(nullptr) {}
 		explicit reverse_iterator(iterator_type it): current(it) {}
 		reverse_iterator(const reverse_iterator<Iterator>& rev_it): current(rev_it.current){}
+		~reverse_iterator() {}
 		
 		iterator_type base() const
 		{ return current; }
