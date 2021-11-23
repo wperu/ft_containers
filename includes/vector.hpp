@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:01:48 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/22 18:46:31 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/11/23 20:37:16 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,12 @@ namespace ft
 		class const_iterator
 		{
 			protected:
-				iterator current;
+				const iterator current;
 			
 			typedef ft::iterator_traits<iterator> trait_type;
 			
 			public:
-				typedef iterator								iterator_type;
+				typedef const iterator								iterator_type;
 				typedef typename ft::random_access_iterator_tag	iterator_category;
 				typedef typename trait_type::value_type			value_type;
 				typedef typename trait_type::difference_type	difference_type;
@@ -255,7 +255,9 @@ namespace ft
 		};
 		
 		typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
-        typedef typename ft::const_reverse_iterator<const_iterator>     const_reverse_iterator;
+        typedef typename ft::reverse_iterator<const_iterator>     		const_reverse_iterator;
+		
+		//constructor
 		
 		explicit vector(const allocator_type& alloc = allocator_type());
         explicit vector(size_type n, const value_type& val = value_type(), const allocator_type &alloc = allocateur_type());
@@ -280,13 +282,13 @@ namespace ft
 
 		reverse_iterator rend();
 		const_reverse_iterator rend() const;
-
+		
 		//Capacity
 
 		size_type size() const;
 		size_type max_size() const;
 		void resize (size_type n, value_type val = value_type());
-		size_type capacity() const;
+		size_type capacity(void) const;
 		bool empty() const;
 		void reserve (size_type n);
 
@@ -307,7 +309,8 @@ namespace ft
 		//Modifiers
 
 		template <class InputIterator>
-  		void assign (InputIterator first, InputIterator last);
+  		void assign (typename ft::enable_if< is_iterator<InputIterator>::value, InputIterator>::type first,
+					InputIterator last);
 		void assign (size_type n, const value_type& val);
 		void push_back (const value_type& val);
 		void pop_back();
@@ -328,11 +331,11 @@ namespace ft
 		
         private:
             value_type *data;
-            size_type  capacity;
-            size_type  size;
-            allocator_type alloc;
+            size_type  _capacity;
+            size_type  _size;
+            allocator_type _alloc;
 
-			void init_data();
+			void init_data(size_type n, const value_type val);
 			void destroy_data();
 
     };
