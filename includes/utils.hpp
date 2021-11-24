@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 17:53:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/23 20:37:46 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/11/24 19:48:59 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <cstddef>
 #include <iostream>
 #include <memory>
+#include "iterator_traits.hpp"
 
 
 namespace ft
