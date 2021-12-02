@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 18:06:08 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/23 19:10:15 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/01 18:08:06 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,31 @@ int main () {
 }
 */
 // vector::rbegin/rend
+#include <map>
+bool fncomp (char lhs, char rhs) {return lhs<rhs;}
+
+struct classcomp {
+  bool operator() (const char& lhs, const char& rhs) const
+  {return lhs<rhs;}
+};
 
 int main ()
 {
-  std::vector<int> myvector;
+  std::map<char,int> first;
 
-  // set some initial content:
-  for (int i=1;i<10;i++) myvector.push_back(i);
+  first['a']=10;
+  first['b']=30;
+  first['c']=50;
+  first['d']=70;
 
-  myvector.resize(5,10);
-  myvector.resize(8,100);
-  myvector.resize(12);
+  std::map<char,int> second (first.begin(),first.end());
 
-  std::cout << "myvector contains:";
-  for (size_t i=0;i<myvector.size();i++)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
-   std::cout <<"lol = "<< myvector.at(33)<<std::endl;;
+  std::map<char,int> third (second);
+
+  std::map<char,int,classcomp> fourth;                 // class as Compare
+
+  bool(*fn_pt)(char,char) = fncomp;
+  std::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
 
   return 0;
 }

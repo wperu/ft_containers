@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:09:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/01 18:44:22 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/02 20:21:10 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 namespace ft
 {
-    template< classe Key, class T,class Compare = std::less<Key>()
-	 ,class alloc = std::allocator<pair<const Key, T>>>
+    template< class Key, class T,class Compare = std::less<Key>()
+	 ,class alloc = std::allocator<pair<const Key, T> > >
      class map
     {
      public:
@@ -39,8 +39,8 @@ namespace ft
 		typedef std::ptrdiff_t 								difference_type;
         typedef typename allocator_type::size_type          size_type;
 		
-		class value_compare
-		class iterator ;
+		class value_compare;
+		class iterator;
 		struct bst;
 		class const_iterator;
 		typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
@@ -123,8 +123,8 @@ namespace ft
 		
 	};
 
-	template <class Key, class T, class Compare, class Alloc>
-	class map<Key,T,Compare,Alloc>::value_compare
+	template <class Key, class T, class Compare, class alloc>
+	class map<Key,T,Compare,alloc>::value_compare
 	{   
   		friend class map;
 		protected:
@@ -138,15 +138,16 @@ namespace ft
   			{
     			return comp(x.first, y.first);
   			}
-	}
+	};
 	
 	struct bst
 	{
 		typedef bst *base_ptr;
 		typedef const *const_base_ptr;
+		
 		base_ptr parent;
 		base_ptr left;
 		base_ptr right;
 		
-	}
+	};
 }
