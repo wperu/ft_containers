@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:09:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/02 20:21:10 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/03 18:35:06 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,21 @@ namespace ft
 		//ALLOCATOR
 
 		allocator_type get_allocator() const;
+
+		private:
 		
+		key_compare _comp;
+		*bst *data;
+		allocator_type _alloc;
+		//BST FONCTION
+		
+		*bst bst_insert(*bst node, value_type data)
+		{
+			*bst new_bst;
+			new_bst = this->get_allocator().allocate(1);
+			new_bst = new (new_bst);
+			new_bst->value = this->_alloc.allocate(1);
+		}
 	};
 
 	template <class Key, class T, class Compare, class alloc>
@@ -139,15 +153,18 @@ namespace ft
     			return comp(x.first, y.first);
   			}
 	};
-	
+	template <class Key, class T, class Compare, class alloc>
 	struct bst
 	{
-		typedef bst *base_ptr;
-		typedef const *const_base_ptr;
+		value_type *value;
 		
-		base_ptr parent;
-		base_ptr left;
-		base_ptr right;
+		bst* parent;
+		bst* left;
+		bst* right;
+		
+
+		bst(*bst new_parent, *bst new_left, *bst new_right, value_type *new_value):parent(new_parent)
+		,left(new_left), right(new_right),value(new_value){};
 		
 	};
 }
