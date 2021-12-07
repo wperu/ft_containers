@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:09:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/03 18:35:06 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/07 17:02:41 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
 		
 		//CONSTRUCTOR
 
-		explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type());
+		explicit map (const key_compare& comp = key_compare(),const allocator_type& Alloc = allocator_type());
 		template <class InputIterator>
   		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
        	const allocator_type& alloc = allocator_type());
@@ -116,18 +116,44 @@ namespace ft
 
 		pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
 		pair<iterator,iterator>             equal_range (const key_type& k);
-
+		
 		//ALLOCATOR
 
 		allocator_type get_allocator() const;
 
-		private:
+
 		
+		
+		private:
+		typedef typename allocator_type::template rebind<bst>::other node_allocator;
 		key_compare _comp;
 		*bst *data;
 		allocator_type _alloc;
-		//BST FONCTION
+		//BST member
+		size_type bst_size_key(bst *curr, const key_type& k) const;
+		{
+			if(!curr)
+				return(0);
+			return(bst_size_key(curr->left, k) + bst_size_key(curr->right, k) + (curr->value->first == k))
+		}
+
+		bst *bst_deep_copy(bst const *src);
+		bst *bst_look(const key_type &key, bst *curr) const;
+		bst *bst_insert_get_parent(value_type data, bst *curr);
+		bst *bst_insert(value_type new_data, bst *root);
+		bst *bst_high_parent(bst* root);
+		bst *bst_remove_zero_child(bst *to_remove);
+		bst *bst_remove_one_child(bst *to_remove);
+		bst *bst_remove(const key_type &key, bst *node);
+		size_type bst_size(bst *root) const;
+		void bst_clear(bst *root);
+		bst *get_min(bst* tree) const;
 		
+
+
+
+
+
 		*bst bst_insert(*bst node, value_type data)
 		{
 			*bst new_bst;
@@ -161,10 +187,8 @@ namespace ft
 		bst* parent;
 		bst* left;
 		bst* right;
-		
-
-		bst(*bst new_parent, *bst new_left, *bst new_right, value_type *new_value):parent(new_parent)
-		,left(new_left), right(new_right),value(new_value){};
-		
+	
+		bst(bst *n_parent, bst *n_left, bst *n_right, value_type *n_value)
+		: parent(n_parent), left(n_left),right(n_right), value(n_value) {}
 	};
 }

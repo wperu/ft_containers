@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:38:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/26 20:07:55 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/07 13:59:53 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,6 @@ namespace ft
     void vector<T,alloc>::pop_back()
     {
         this->_alloc.destroy(&this->data[this->_size]);
-        //this->resize(this->size - 1);
         this->reserve(this->_size - 1);
         this->_size--;
     }
