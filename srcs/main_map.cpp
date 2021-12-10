@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_map.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/10 20:19:44 by wperu             #+#    #+#             */
+/*   Updated: 2021/12/10 20:19:45 by wperu            ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <iostream>
-#include "includes/map_fct.hpp"
+#include "../includes/map_fct.hpp"
 
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}
 

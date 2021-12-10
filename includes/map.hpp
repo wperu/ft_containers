@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:09:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 16:52:14 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 20:12:18 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,12 +316,13 @@ namespace ft
 	template <class Key, class T, class Compare, class alloc>
 	struct map<Key,T,Compare,alloc>::bst
 	{
-		value_type *value;
+		
 		
 		bst* parent;
 		bst* left;
 		bst* right;
-	
+
+		value_type *value;
 		bst(bst *n_parent, bst *n_left, bst *n_right, value_type *n_value)
 		: parent(n_parent), left(n_left),right(n_right), value(n_value) {}
 	};

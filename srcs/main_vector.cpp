@@ -6,11 +6,11 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:26:36 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 19:08:52 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 20:28:53 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/vector_fct.hpp"
+#include "../includes/vector_fct.hpp"
 #include <iostream>
 #include <vector>
 //#include "includes/vector.hpp"
@@ -94,7 +94,7 @@ int main()
   myvector.resize(8,100);
 
   std::cout << "myvector contains:";
-  for (int i=0;i<myvector.size();i++)
+  for (unsigned long i=0;i < myvector.size();i++)
     std::cout << ' ' << myvector[i];
   std::cout << '\n';
 }

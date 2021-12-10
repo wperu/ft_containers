@@ -6,12 +6,12 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 18:06:08 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 19:42:15 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 20:19:35 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "includes/stack.hpp"
+#include "../includes/stack.hpp"
 
 
 #include <iostream>       // std::cout         

@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:38:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 19:23:23 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 20:10:30 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ namespace ft
 	}*/
 
 	template< typename T, typename alloc>
-    vector<T,alloc>::vector(const vector& src): _alloc(allocator_type(src._alloc)), _size(src._size), _capacity(src._capacity)
+    vector<T,alloc>::vector(const vector& src): _capacity(src._capacity),_size(src._size), _alloc(allocator_type(src._alloc))
 	{
 		size_type	i;
 

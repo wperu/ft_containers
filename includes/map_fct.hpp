@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 20:12:07 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 17:14:35 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 20:11:40 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ namespace ft
     //****CONSTRUCTOR
     
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::map(const key_compare& comp,const allocator_type& Alloc):_comp(comp),_alloc(Alloc),data(NULL)
+    map<Key,T,Compare,alloc>::map(const key_compare& comp,const allocator_type& Alloc):_comp(comp),data(NULL),_alloc(Alloc)
     {}
     
     template <class Key, class T, class Compare, class alloc>
     template <class InputIterator>
     map<Key,T,Compare,alloc>::map(InputIterator first, InputIterator last, const key_compare& comp,const allocator_type& Alloc)
-    :_comp(comp),_alloc(Alloc),data(NULL)
+    :_comp(comp),data(NULL),_alloc(Alloc)
     {
         while(first != last)
         {
