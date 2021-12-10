@@ -6,14 +6,13 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:01:48 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/26 16:25:36 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 19:04:51 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <algorithm>
-#include <iostream>
+
 #include <limits>
 #include <typeinfo>
 #include "utils.hpp"
@@ -315,9 +314,9 @@ namespace ft
 
         vector(size_type n, const value_type& val = value_type(), const allocator_type &allo = allocator_type());
         
-        /*template <class InputIterator>
-            vector(InputIterator first, InputIterator last, const allocator_type);
-        */
+        template <class InputIterator>
+            vector(typename ft::enable_if< is_iterator<InputIterator>::value,InputIterator>::type first, InputIterator last, const allocator_type);
+        
         vector (const vector& src);
         ~vector();
 		vector& operator= (const vector& x);

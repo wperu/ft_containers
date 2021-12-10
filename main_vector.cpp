@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:26:36 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/26 20:12:33 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 19:08:52 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int main()
  {
   ft::vector<int> first;                                // empty vector of ints
   ft::vector<int> second (4,100);                       // four ints with value 100
-  //::vector<int> third (second.begin(),second.end());  // iterating through second
- // ft::vector<int> fourth = second;  
+ // ft::vector<int> third (second.begin(),second.end());  // iterating through second
+  ft::vector<int> fourth = second;  
   // the iterator constructor can also be used to construct from arrays:
   
-  for (ft::vector<int>::iterator it = second.begin(); it != second.end(); ++it)
+  for (ft::vector<int>::iterator it = fourth.begin(); it != fourth.end(); ++it)
   { 
     std::cout << ' ' << *it;
   }

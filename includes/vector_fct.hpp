@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:38:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/07 13:59:53 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 19:23:23 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,32 @@ namespace ft
     {
         this->init_data(n,val);
     }
+/*	template< typename T, typename alloc>
+	template <class InputIterator>
+    vector<T,alloc>::vector(typename ft::enable_if< is_iterator<InputIterator>::value,InputIterator>::type first, InputIterator last, const allocator_type)
+	{
+		size_t	i;
+
+		_size = last - first;
+		_capacity = 2 * _size;
+		_data = allocator_type(alloc).allocate(_capacity, 0);
+		i = 0;
+		while (i < _size)
+			_data[i++] = *(first++);
+	}*/
 
 	template< typename T, typename alloc>
-    vector<T,alloc>::vector(const vector& src)
+    vector<T,alloc>::vector(const vector& src): _alloc(allocator_type(src._alloc)), _size(src._size), _capacity(src._capacity)
 	{
-		*this = src;
+		size_type	i;
+
+		i = 0;
+		data = _alloc.allocate(_capacity);
+		while (i < _size)
+		{
+			data[i] = src.data[i];
+			i++;
+		}
 	}
 	
     
@@ -37,6 +58,7 @@ namespace ft
     vector<T,alloc>& vector<T,alloc>::operator=(const vector& x)
     {
         this->data = this->_alloc.allocate(x._capacity);
+		this->_capacity = x._capacity;
         this->assign(x.begin(),x.end());
         return *this;
     }
@@ -112,7 +134,7 @@ namespace ft
     template<typename T, typename alloc>
     typename vector<T,alloc>::size_type vector<T,alloc>::max_size() const
     {
-        return std::numeric_limits<difference_type>::max();
+        return (std::numeric_limits<difference_type>::max() / sizeof(value_type));
     }
 
     template<typename T, typename alloc>
@@ -128,7 +150,6 @@ namespace ft
             return ;
         }
         this->reserve(n);
-        std::cout<<"size: "<<this->_size <<std::endl;
         while(this->_size < n)
         {
             this->_alloc.destroy(&(this->data[this->_size]));
@@ -155,6 +176,7 @@ namespace ft
     void vector<T,alloc>::reserve(size_type n)
     {
         size_type i = 0;
+		
 		if(n <= this->_capacity)
             return;
         if(n > this->max_size())
@@ -163,7 +185,8 @@ namespace ft
 		if(this->_capacity == 0)
             this->_capacity++;
 		while(this->_capacity < n)
-			this->_capacity++;
+			this->_capacity *= 2;
+		std::cout<<"capacity"<<_capacity<<std::endl;
 		T *tmp = this->_alloc.allocate(this->_capacity);
         while(i < this->_size)
 		{
@@ -238,7 +261,6 @@ namespace ft
         {
             this->_alloc.destroy(&this->data[i]);
             this->_alloc.construct(&this->data[i],*first);
-			std::cout << *first << std::endl;
             ++first;
             ++i;
         }
@@ -254,7 +276,6 @@ namespace ft
         {
            // this->_alloc.destroy(&this->data[i]);
             this->_alloc.construct(&this->data[i],val);
-            std::cout << this->_data[i] << std::endl;
             ++i;
         }
     }
@@ -262,28 +283,25 @@ namespace ft
     template <typename T, typename alloc>
     void vector<T,alloc>::push_back(const value_type& val)
     {
-        if(this->_size == this->_capacity)
-        {
-            size_type n = this->_size + 1;
-			//this->reserve(this->_size + 1);
-			size_type i = 0;
-			typename vector<T,alloc>::size_type oldcapacity = this->_capacity;
-			if(this->_capacity == 0)
-				this->_capacity++;
-			while(this->_capacity < this->_size + 1)
-				this->_capacity *= 2;
-			T *tmp = this->_alloc.allocate(this->_capacity);
-			while(i < this->_size)
+        value_type	*new_data;
+		size_type	i;
+
+		if (_size == _capacity)
+		{
+			_capacity = (_size + 1) * 2;
+			new_data = _alloc.allocate(_capacity);
+			i = 0;
+			while (i < _size)
 			{
-				this->_alloc.construct(&tmp[i],this->data[i]);
+				new_data[i] = data[i];
 				i++;
 			}
-			this->destroy_data();
-			this->_alloc.deallocate(this->data,oldcapacity);
-			this->data = tmp;
-        }
-        this->_alloc.construct(&this->data[this->_size],val);
-        this->_size++;
+			_alloc.deallocate(data, _size);
+			data = new_data;
+		}
+		value_type *tmp = data + _size;
+		tmp = new (tmp) value_type(val);
+		_size++;
     }
     
     template <typename T, typename alloc>
@@ -320,20 +338,44 @@ namespace ft
 	template <typename T, typename alloc>
 	void vector<T, alloc>::insert(iterator position, size_type n, const value_type& val)
 	{
-		size_type limit;
-		size_type oldsize = this->_size;
+		value_type	*new_data;
+		iterator	it;
+		iterator	it_end;
+		size_type	i;
+		size_type	new_capacity;
 
-		if(n == 0)
-			return ;
-		this->reserve(this->_size + n);
-        this->_size += n;
-		limit = position - this->begin();
-		while(--oldsize >= limit)
-			this->data[oldsize + n ] = this->data[oldsize];
-        oldsize = limit + n;
-		while(--oldsize >= limit)
-			this->data[oldsize] = value_type(val);
-		return ;
+		if (_capacity < _size + n)
+		{
+			_size += n;
+			new_capacity = _size * 2;
+			new_data = _alloc.allocate(new_capacity);
+			i = 0;
+			it = begin();
+			it_end = end();
+			while (it != position)
+				new_data[i++] = *(it++);
+			n += i;
+			while (i < n)
+				new_data[i++] = val;
+			new_data[i++] = val;
+			while (it != it_end)
+				new_data[i++] = *(it++);
+			_alloc.deallocate(data, _capacity);
+			_capacity = new_capacity;
+			data = new_data;
+		}
+		else
+		{
+			_size += n;
+			it = end() + (n - 1);
+			while (it != position + (n - 1))
+			{
+				*it = *(it - n);
+				it--;
+			}
+			while (it != position - 1)
+				*(it--) = val;
+		}
 	}
 
 	template <typename T, typename alloc>
