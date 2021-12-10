@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:09:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/09 20:52:34 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 16:52:14 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 #include "iterator.hpp"
 #include <functional>
 
+
 namespace ft
 {
-    template< class Key, class T,class Compare = std::less<Key>()
+    template< class Key, class T,class Compare = std::less<Key>
 	 ,class alloc = std::allocator<pair<const Key, T> > >
      class map
     {
@@ -84,7 +85,16 @@ namespace ft
 		
 		//MODIFIERS
 
-		pair<iterator,bool> insert (const value_type& val);
+		pair<iterator,bool> insert (const value_type& val)
+		{
+			bst	*tmp;
+
+			tmp = bst_look(val.first, data);
+			if (tmp)
+				return (make_pair(iterator(&data, tmp), false));
+			data = bst_insert(val, data);
+		return (make_pair(iterator(&data, bst_look(val.first,data)), true));
+	}
 		iterator insert (iterator position, const value_type& val);
 		template <class InputIterator>
   		void insert (InputIterator first, InputIterator last);
@@ -155,7 +165,7 @@ namespace ft
 			}
 			if(src->right)
 			{
-				curr->right = bst_deep_copy(curr->right);
+				curr->right = bst_deep_copy(src->right);
 				curr->right->parent = curr;
 			}
 			return(curr);
@@ -168,7 +178,8 @@ namespace ft
 			if(curr->value->first == key)
 				return(curr);
 			if(_comp(key,curr->value->first))
-				return(bst_look(key,curr->right));
+				return(bst_look(key,curr->left));
+			return (bst_look(key, curr->right));
 		}
 		
 		bst *bst_insert_get_parent(value_type data, bst *curr)
@@ -192,12 +203,12 @@ namespace ft
 
 			new_bst = node_allocator(_alloc).allocate(1);
 			new_bst = new (new_bst)
-			bst(_bst_insert_get_parent(new_data, root), NULL, NULL, NULL);
-			new_bst->data = _alloc.allocate(1);
-			new_bst->data = new (new_bst->data) value_type(new_data);
+			bst(bst_insert_get_parent(new_data, root), NULL, NULL, NULL);
+			new_bst->value = _alloc.allocate(1);
+			new_bst->value = new (new_bst->value) value_type(new_data);
 			if (!new_bst->parent)
 				return (new_bst);
-			if (_comp(new_data.first, new_bst->parent->data->first))
+			if (_comp(new_data.first, new_bst->parent->value->first))
 				new_bst->parent->left = new_bst;
 			else
 				new_bst->parent->right = new_bst;
@@ -236,13 +247,13 @@ namespace ft
 			}
 			child->parent = to_remove->parent;
 			_alloc.deallocate(to_remove->value, 1);
-			node_allocator(_alloc).dealllocate(to_remove, 1);
+			node_allocator(_alloc).deallocate(to_remove, 1);
 			return(bst_high_parent(child));
 		}
 		
 		bst *bst_remove_two_children(bst *to_remove)
 		{
-			bst child;
+			bst *child;
 
 			child = to_remove->right;
 			while(child->left)
@@ -263,14 +274,14 @@ namespace ft
 		{
 			bst		*to_remove;
 
-			if (!(to_remove = _bst_lookup(key, root)))
+			if (!(to_remove = bst_look(key, root)))
 				return (root);
 			if (to_remove->left && to_remove->right)
-				return (_bst_remove_two_children(to_remove));
+				return (bst_remove_two_children(to_remove));
 			else if ((to_remove->left != NULL) != (to_remove->right != NULL))
-				return (_bst_remove_one_child(to_remove));
+				return (bst_remove_one_child(to_remove));
 			else
-				return (_bst_remove_zero_child(to_remove));
+				return (bst_remove_zero_child(to_remove));
 		}
 		size_type bst_size(bst *root) const
 		{
@@ -281,15 +292,15 @@ namespace ft
 		
 		void bst_clear(bst *root)
 		{
-			{
-			if(!root)
+			
+			if(root)
 			{
 				bst_clear(root->left);
 				bst_clear(root->right);
-				_alloc.deallocate(root->data, 1);
+				_alloc.deallocate(root->value, 1);
 				node_allocator(_alloc).deallocate(root,1);
 			}
-		}
+		
 		}
 		bst *get_min(bst* tree) const
 		{
@@ -362,15 +373,15 @@ namespace ft
 		}
 		value_type			&operator*(void)
 		{
-			return (*(_current->data));
+			return (*(_current->value));
 		}
 		value_type const	&operator*(void) const
 		{
-			return (*(_current->data));
+			return (*(_current->value));
 		}
 		value_type			*operator->(void)
 		{
-			return (_current->data);
+			return (_current->value);
 		}
 		value_type const		*operator->() const
 		{
@@ -422,7 +433,7 @@ namespace ft
 		{
 			if (!origin->parent)
 				return (NULL);
-			else if (key_compare()(origin->data->first, origin->parent->data->first))
+			else if (key_compare()(origin->value->first, origin->parent->value->first))
 				return (origin->parent);
 			else
 				return (_get_next_bigger_parent(origin->parent));
@@ -444,7 +455,7 @@ namespace ft
 		{
 			if (!origin->parent)
 				return (NULL);
-			else if (key_compare()(origin->parent->data->first, origin->data->first))
+			else if (key_compare()(origin->parent->value->first, origin->value->first))
 				return (origin->parent);
 			else
 				return (_get_next_smaller_parent(origin->parent));

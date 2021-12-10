@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 17:53:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/11/24 19:48:59 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 16:53:44 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ namespace ft
         template<class U, class V>
         pair (const pair<U,V>& ptr):first(ptr.first),second(ptr.second){};
         
-        pair& operator=(const pair& rhs)
+        pair &operator=(const pair &rhs)
         {
             if(*this != rhs)
             {

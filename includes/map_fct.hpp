@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 20:12:07 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/09 20:56:44 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/10 17:14:35 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,19 @@ namespace ft
     map<Key,T,Compare,alloc>::map(InputIterator first, InputIterator last, const key_compare& comp,const allocator_type& Alloc)
     :_comp(comp),_alloc(Alloc),data(NULL)
     {
-        while(first_it != last_it)
+        while(first != last)
         {
-            if(!bst_look((*first_it).first,_root))
-                _root = bst_insert(*first_it,root);
-            first_i++;
+            if(!bst_look((*first).first,data))
+                data = bst_insert(*first,data);
+            first++;
         }
         
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::map(const map& x) : _comp(x._comp), alloc(x._alloc)
+    map<Key,T,Compare,alloc>::map(const map& x) : _comp(x._comp), _alloc(x._alloc)
     {
-        _root = bst_deep_copy(x.data);
+        data = bst_deep_copy(x.data);
     }
     
     template <class Key, class T, class Compare, class alloc>
@@ -61,49 +61,49 @@ namespace ft
     //****ITERATOR****
     
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::iterator map<Key,T,Compare,alloc>::begin()
+    typename map<Key,T,Compare,alloc>::iterator map<Key,T,Compare,alloc>::begin()
     {
         return(iterator(&data,get_min(data)));
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::const_iterator map<Key,T,Compare,alloc>::begin() const
+    typename map<Key,T,Compare,alloc>::const_iterator map<Key,T,Compare,alloc>::begin() const
     {
         return(const_iterator(&data,get_min(data)));
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::iterator map<Key,T,Compare,alloc>::end()
+    typename map<Key,T,Compare,alloc>::iterator map<Key,T,Compare,alloc>::end()
     {
         return(iterator(&data,NULL));
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::const_iterator map<Key,T,Compare,alloc>::end() const
+    typename map<Key,T,Compare,alloc>::const_iterator map<Key,T,Compare,alloc>::end() const
     {
         return(const_iterator(&data,NULL));
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::reverse_iterator map<Key,T,Compare,alloc>::rbegin()
+    typename map<Key,T,Compare,alloc>::reverse_iterator map<Key,T,Compare,alloc>::rbegin()
     {
       return reverse_iterator(end());
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::const_reverse_iterator map<Key,T,Compare,alloc>::rbegin() const
+    typename map<Key,T,Compare,alloc>::const_reverse_iterator map<Key,T,Compare,alloc>::rbegin() const
     {
       return const_reverse_iterator(end());
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::reverse_iterator map<Key,T,Compare,alloc>::rend()
+    typename map<Key,T,Compare,alloc>::reverse_iterator map<Key,T,Compare,alloc>::rend()
     {
       return reverse_iterator(begin());
     }
 
     template <class Key, class T, class Compare, class alloc>
-    map<Key,T,Compare,alloc>::const_reverse_iterator map<Key,T,Compare,alloc>::rend() const
+    typename map<Key,T,Compare,alloc>::const_reverse_iterator map<Key,T,Compare,alloc>::rend() const
     {
       return const_reverse_iterator(begin());
     }
@@ -131,11 +131,11 @@ namespace ft
     template <class Key, class T, class Compare, class alloc>
     typename map<Key,T,Compare,alloc>::mapped_type& map<Key,T,Compare,alloc>::operator[](const key_type& k)
     {
-        *bst *current;
+        bst *current;
         current = bst_look(k, data);
         if(!current)
         {
-            data = bst_insert(value_type(k,mapped_type()),data);
+            data = bst_insert(value_type(k,mapped_type()),data);           
             current = bst_look(k, data);
         }
         return(current->value->second);
@@ -200,10 +200,10 @@ namespace ft
         }
         target = tmp_alloc.allocate(size);
         i = 0;
-        while(first_clone != last)
+        while(first_cpy != last)
         {
-            target[i++] = (*first_clone).first;
-            first_clone++;
+            target[i++] = (*first_cpy).first;
+            first_cpy++;
         }
         i =  0;
         while(_comp(i,size))
@@ -235,17 +235,17 @@ namespace ft
         data = NULL;
     }
 
-    //****OBSERVERS
+    //****OBSERVERS****
     template <class Key, class T, class Compare, class alloc>
 	typename map<Key,T,Compare,alloc>::key_compare map<Key,T,Compare,alloc>::key_comp() const
     {
-        return(this->comp);
+        return(_comp);
     }
 
     template <class Key, class T, class Compare, class alloc>
 	typename map<Key,T,Compare,alloc>::value_compare map<Key,T,Compare,alloc>::value_comp() const
     {
-        return(this->comp);
+        return(_comp);
     }
 
     //****OPERATIONS****
@@ -275,7 +275,7 @@ namespace ft
         iterator itend = end();
 
         while(it != itend && _comp((*it).first,k))
-            i++;
+            it++;
         return (it);
     }
     
@@ -286,7 +286,7 @@ namespace ft
         const_iterator itend = end();
 
         while(it != itend && _comp((*it).first,k))
-            i++;
+            it++;
         return (it);
     }
 
@@ -296,8 +296,8 @@ namespace ft
         reverse_iterator it = rbegin();
         reverse_iterator itend = rend();
 
-        while(it != itend && _comp((*it).first,k))
-            i++;
+        while(it != itend && _comp(k,(*it).first))
+            it++;
         return (it.base());
     }
     
@@ -307,8 +307,8 @@ namespace ft
         const_reverse_iterator it = rbegin();
         const_reverse_iterator itend = rend();
 
-        while(it != itend && _comp((*it).first,k))
-            i++;
+        while(it != itend && _comp(k,(*it).first))
+            it++;
         return (it.base());
     }
     /*
@@ -330,14 +330,5 @@ namespace ft
 	{
 		return this->_alloc;
 	}
-/*
-    //****BST MEMBER****
-    template <class Key, class T, class Compare, class alloc>
-    typename map<Key,T,Compare,alloc>::size_type map<Key,T,Compare,alloc>::bst_size_key(bst *curr, const key_type& k) const
-    {
-        
-    }
-    
-    */
     
 } 
