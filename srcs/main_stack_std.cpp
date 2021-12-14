@@ -1,45 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_stack.cpp                                     :+:      :+:    :+:   */
+/*   main_stack_std.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/13 18:06:08 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/14 17:21:22 by wperu            ###   ########lyon.fr   */
+/*   Created: 2021/12/14 17:12:40 by wperu             #+#    #+#             */
+/*   Updated: 2021/12/14 17:13:31 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include "../includes/stack.hpp"
-
-
-#include <iostream>       // std::cout         
-        // std::vector
-#include <deque>          // std::deque
-
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <stack>
 
 int main ()
 {
     std::cout<<"-------------TEST CONSTRUCTOR------------"<<std::endl;
   {
   std::deque<int> mydeque (3,100);          // deque with 3 elements
-  ft::vector<int> myvector (2,200);        // vector with 2 elements
+  std::vector<int> myvector (2,200);        // vector with 2 elements
 
-  ft::stack<int> first;                    // empty stack
-  ft::stack<int,std::deque<int> > second (mydeque);         // stack initialized to copy of deque
+  std::stack<int> first;                    // empty stack
+  std::stack<int> second (mydeque);         // stack initialized to copy of deque
 
-  ft::stack<int> third;  // empty stack using vector
-  ft::stack<int> fourth (myvector);
+  std::stack<int,std::vector<int> > third;  // empty stack using vector
+  std::stack<int,std::vector<int> > fourth (myvector);
 
   std::cout << "size of first: " << first.size() << '\n';
   std::cout << "size of second: " << second.size() << '\n';
   std::cout << "size of third: " << third.size() << '\n';
   std::cout << "size of fourth: " << fourth.size() << '\n';
   }
+
     std::cout<<"-------------TEST EMPTY------------"<<std::endl;
   {
-  ft::stack<int> mystack;
+  std::stack<int> mystack;
   int sum (0);
 
   for (int i=1;i<=10;i++) mystack.push(i);
@@ -56,7 +53,7 @@ int main ()
   }
     std::cout<<"-------------TEST SIZE------------"<<std::endl;
   {
-  ft::stack<int> myints;
+  std::stack<int> myints;
   std::cout << "0. size: " << myints.size() << '\n';
 
   for (int i=0; i<5; i++) myints.push(i);
@@ -67,9 +64,9 @@ int main ()
 
 
 }
-  std::cout<<"-------------TEST TOP------------"<<std::endl;
+std::cout<<"-------------TEST TOP------------"<<std::endl;
 {
-  ft::stack<int> mystack;
+  std::stack<int> mystack;
 
   mystack.push(10);
   mystack.push(20);
@@ -82,7 +79,7 @@ int main ()
 }
 std::cout<<"-------------TEST PUSH/POP------------"<<std::endl;
 {
-  ft::stack<int> mystack;
+  std::stack<int> mystack;
 
   for (int i=0; i<5; ++i) mystack.push(i);
 
@@ -98,10 +95,10 @@ std::cout<<"-------------TEST PUSH/POP------------"<<std::endl;
 }
 std::cout<<"-------------TEST OPERATOR BOOL------------"<<std::endl;
 {
-ft::vector<int> f(3,100);   // three ints with a value of 100
-ft::vector<int> b (2,200);   // two ints with a value of 200
-ft::stack<int> foo(f);
-ft::stack<int> bar(f);
+std::vector<int> f(3,100);   // three ints with a value of 100
+std::vector<int> b (2,200);   // two ints with a value of 200
+std::stack<int,std::vector<int> > foo(f);
+std::stack<int,std::vector<int> > bar(f);
   if (foo==bar) std::cout << "foo and bar are equal\n";
   if (foo!=bar) std::cout << "foo and bar are not equal\n";
   if (foo< bar) std::cout << "foo is less than bar\n";
