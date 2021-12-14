@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 17:53:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 16:53:44 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/14 16:43:17 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,6 @@ namespace ft
     
     template<class T> 
     struct enable_if<true, T> { typedef T type; };
-
-    template <class Iter, class C = void>
-	struct is_iterator {
-		static const bool value = false;
-	};
-
-	template <class Iter>
-	struct is_iterator<Iter>
-	{
-		typedef typename ft::iterator_traits<Iter>::iterator_category it;
-		static const bool value = true;
-	};
     
 
     template <class InputIterator1, class InputIterator2>

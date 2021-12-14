@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:01:48 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 19:04:51 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/14 15:53:37 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "utils.hpp"
 #include "iterator_traits.hpp"
 #include "iterator_reverse.hpp"
+#include "is_integral.hpp"
 
 namespace ft
 {
@@ -315,7 +316,7 @@ namespace ft
         vector(size_type n, const value_type& val = value_type(), const allocator_type &allo = allocator_type());
         
         template <class InputIterator>
-            vector(typename ft::enable_if< is_iterator<InputIterator>::value,InputIterator>::type first, InputIterator last, const allocator_type);
+            vector(InputIterator first, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type& allocator = allocator_type());
         
         vector (const vector& src);
         ~vector();
@@ -361,16 +362,15 @@ namespace ft
 		//Modifiers
 
 		template <class InputIterator>
-  		void assign (typename ft::enable_if< is_iterator<InputIterator>::value, InputIterator>::type first,
-					InputIterator last);
+  		void assign (InputIterator first, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last);
 		void assign (size_type n, const value_type& val);
 		void push_back (const value_type& val);
 		void pop_back();
 		
 		iterator insert (iterator position, const value_type& val);
     	void insert (iterator position, size_type n, const value_type& val);
-		/*template <class InputIterator>
-   		 void insert (iterator position, InputIterator first, InputIterator last);*/
+		template <class InputIterator>
+   		 void insert (iterator position, InputIterator first,typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last);
 
 		iterator erase (iterator position);
 		iterator erase (iterator first, iterator last);

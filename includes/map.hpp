@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:09:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 20:12:18 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/14 17:07:13 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,7 +346,7 @@ namespace ft
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	//iterator
 
 	template <class Key, class T, class Compare, class Alloc>
 	class	ft::map<Key, T, Compare, Alloc>::iterator : public ft::base_iterator<bidirectional_iterator_tag, ft::pair<const Key, T> >

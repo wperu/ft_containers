@@ -6,7 +6,7 @@
 /*   By: wperu <wperu@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:38:04 by wperu             #+#    #+#             */
-/*   Updated: 2021/12/10 20:10:30 by wperu            ###   ########lyon.fr   */
+/*   Updated: 2021/12/14 17:02:09 by wperu            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 namespace ft
 {
+	//****CONSTRUCTOR****
+	
     template< typename T, typename alloc>
     vector<T,alloc>::vector(const allocator_type& allocator) : data(NULL),_capacity(0),_size(0), _alloc(allocator)
     {}
@@ -25,19 +27,20 @@ namespace ft
     {
         this->init_data(n,val);
     }
-/*	template< typename T, typename alloc>
+	
+	template< typename T, typename alloc>
 	template <class InputIterator>
-    vector<T,alloc>::vector(typename ft::enable_if< is_iterator<InputIterator>::value,InputIterator>::type first, InputIterator last, const allocator_type)
+    vector<T,alloc>::vector(InputIterator first, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type& allocator):_alloc(allocator)
 	{
 		size_t	i;
 
 		_size = last - first;
 		_capacity = 2 * _size;
-		_data = allocator_type(alloc).allocate(_capacity, 0);
+		data = allocator_type(_alloc).allocate(_capacity, 0);
 		i = 0;
 		while (i < _size)
-			_data[i++] = *(first++);
-	}*/
+			data[i++] = *(first++);
+	}
 
 	template< typename T, typename alloc>
     vector<T,alloc>::vector(const vector& src): _capacity(src._capacity),_size(src._size), _alloc(allocator_type(src._alloc))
@@ -62,6 +65,8 @@ namespace ft
         this->assign(x.begin(),x.end());
         return *this;
     }
+	
+	//****DESTRUCTOR****
 
     template<typename T,typename alloc>
     vector<T,alloc>::~vector()
@@ -70,6 +75,8 @@ namespace ft
         this->_alloc.deallocate(this->data,this->_capacity);
 
     }
+	
+	//***ITERATOR***
 
     template<typename T, typename alloc>
     typename vector<T,alloc>::iterator vector<T,alloc>::begin()
@@ -96,8 +103,6 @@ namespace ft
         return vector<T,alloc>::const_iterator(&data[_size]);
     }
 
-   //***ITERATOR***
-
     template<typename T, typename alloc>
     typename vector<T,alloc>::reverse_iterator vector<T,alloc>::rbegin()
     {
@@ -123,7 +128,7 @@ namespace ft
     }
 
 
-    //Capacity
+    //****CAPACITY****
 
     template<typename T, typename alloc>
     typename vector<T,alloc>::size_type vector<T,alloc>::size(void) const
@@ -186,7 +191,6 @@ namespace ft
             this->_capacity++;
 		while(this->_capacity < n)
 			this->_capacity *= 2;
-		std::cout<<"capacity"<<_capacity<<std::endl;
 		T *tmp = this->_alloc.allocate(this->_capacity);
         while(i < this->_size)
 		{
@@ -197,6 +201,8 @@ namespace ft
         this->_alloc.deallocate(this->data,oldcapacity);
 		this->data = tmp;
     }
+
+	//****ELEMENT_ACCESS****
 
 	template<typename T, typename alloc>
     typename vector<T,alloc>::reference vector<T,alloc>::operator[](vector<T,alloc>::size_type n)
@@ -214,7 +220,7 @@ namespace ft
 	{
 		if(n > this->_size)
 			throw std::out_of_range("vector");
-		this->data[n];	
+		return(this->data[n]);	
 	}
 
 	template<typename T, typename alloc>
@@ -249,21 +255,30 @@ namespace ft
 		return this->data[this->_size - 1];	
 	}
 
+	//****MODIFIERS****
+
 	template<typename T,typename alloc>
 	template<class InputIterator>
-	void  vector<T,alloc>::assign(typename ft::enable_if< is_iterator<InputIterator>::value, InputIterator>::type first,
-	InputIterator last)
+	void  vector<T,alloc>::assign (InputIterator first, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last)
 	{
-        typename vector<T, alloc>::size_type i = 0;
-        typename vector<T, alloc>::difference_type size = std::abs(last - first);
-        this->reserve(size);
-        while(first != last)
-        {
-            this->_alloc.destroy(&this->data[i]);
-            this->_alloc.construct(&this->data[i],*first);
-            ++first;
-            ++i;
-        }
+        size_type	i;
+	
+		i = 0;
+		while (i < _size)
+			data[i++].~value_type();
+		_size = last - first;
+		if (_size > _capacity)
+		{
+			_alloc.deallocate(data, _capacity);
+			_capacity = _size * 2;
+			data = _alloc.allocate(_capacity);
+		}
+		i = 0;
+		while (first != last)
+		{
+			data[i++] = *first;
+			first++;
+		}
 	}
 
     template<typename T,typename alloc>
@@ -274,7 +289,6 @@ namespace ft
         this->resize(n);
         while(i != n)
         {
-           // this->_alloc.destroy(&this->data[i]);
             this->_alloc.construct(&this->data[i],val);
             ++i;
         }
@@ -315,24 +329,41 @@ namespace ft
     template <typename T, typename alloc>
     typename vector<T,alloc>::iterator vector<T,alloc>::insert (iterator position, const value_type& val)
     {
-        value_type tmp;
-        value_type before;
-        vector<T,alloc>::iterator first = position;
+        value_type	*new_data;
+		iterator	it;
+		iterator	it_end;
+		size_type	i;
+		size_type	location;
 
-        reserve(this->size + 1);
-        this->size++;
-        tmp = *position;
-		before = tmp;
-        *position = value_type(val);
-        ++position;
-        while(position != this->end())
-        {
-			tmp = before;
-			before = *position;
-			*position = tmp;
-			++position;
-        }
-		return first;
+		if (_size == _capacity)
+		{
+			_capacity = (_size + 1) * 2;
+			new_data = _alloc.allocate(_capacity);
+			i = 0;
+			it = begin();
+			it_end = end();
+			while (it != position)
+				new_data[i++] = *(it++);
+			location = i;
+			new_data[i++] = val;
+			while (it != it_end)
+				new_data[i++] = *(it++);
+			_alloc.deallocate(data, _size);
+			data = new_data;
+		}
+		else
+		{
+			it = end();
+			while (it != position)
+			{
+				*it = *(it - 1);
+				it--;
+			}
+			location = position - begin();
+			*it = val;
+		}
+		_size++;
+		return (iterator(data + location));
     }
     
 	template <typename T, typename alloc>
@@ -377,7 +408,46 @@ namespace ft
 				*(it--) = val;
 		}
 	}
-
+	template <typename T, typename alloc>
+	template <class InputIterator>
+	void vector<T,alloc>::insert (iterator position, InputIterator first,typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last)
+	{
+		value_type *new_data;
+		size_type insert_size;
+		iterator  data_it;
+		iterator data_end;
+		size_type i;
+		insert_size = last - first;
+		if(_capacity <_size + insert_size)
+		{
+			_capacity =(_size + insert_size) * 2;
+			new_data = _alloc.allocate(_capacity);
+			data_it = begin();
+			i  = 0;
+			while(data_it != position)
+				new_data[i++] = *(data_it++);
+			while(first != last)
+				new_data[i++] = *(first++);
+			data_end = end();
+			while(data_it < data_end)
+				new_data[i++] = *(data_it++);
+			_alloc.deallocate(data,_size);
+			data = new_data;
+		}
+		else
+		{
+			data_it = end() +(insert_size - 1);
+			while(data_it != position + (insert_size - 1))
+			{
+				*data_it = *(data_it - insert_size);
+				data_it--;
+			}
+			while(last != first)
+				*(data_it--) = *(--last);
+		}
+		_size += insert_size; 
+	}
+	
 	template <typename T, typename alloc>
     typename vector<T,alloc>::iterator vector<T,alloc>::erase(iterator position)
 	{
@@ -438,12 +508,11 @@ namespace ft
 	template <typename T, typename alloc>
 	void vector<T,alloc>::clear()
 	{
-		//vector<T,alloc>::iterator first = this->begin();
 		this->destroy_data();
 		this->_size = 0;
 	}
 
-	//Allocator
+	//****ALLOCATOR****
 
 	template <typename T, typename alloc>
 	typename vector<T,alloc>::allocator_type vector<T,alloc>::get_allocator() const
@@ -478,7 +547,7 @@ namespace ft
 	}
 
 
-	//no members
+	//****NON-MEMBER***
 
 	template<class T, class alloc>
 	void swap (vector<T,alloc>& x, vector<T,alloc>& y)
